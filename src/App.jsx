@@ -85,19 +85,30 @@ function App() {
   };
 
   const loadResults = async () => {
+    try {
 
-    const snapshot = await getDocs(
-      collection(db, "results")
-    );
+      const snapshot = await getDocs(
+        collection(db, "results")
+      );
 
-    const data = {};
+      console.log("Resultados encontrados:", snapshot.size);
 
-    snapshot.forEach((d) => {
-      data[d.id] = d.data();
-    });
+      const data = {};
 
-    setResults(data);
+      snapshot.forEach((d) => {
+        console.log(d.id, d.data());
+        data[d.id] = d.data();
+      });
 
+      console.log(data);
+
+      setResults(data);
+
+    } catch (error) {
+
+      console.error("ERROR RESULTS", error);
+
+    }
   };
 
   const calculateRanking = async () => {
@@ -223,9 +234,12 @@ function App() {
     loadResults();
 
   }, [user]);
-  
+
   useEffect(() => {
 
+    console.log("USUARIOS", allUsers);
+    console.log("RESULTADOS", results);
+    
     if (
       allUsers.length === 0 ||
       Object.keys(results).length === 0
