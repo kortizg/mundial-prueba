@@ -226,15 +226,7 @@ function App() {
 
     return predResult === realResult ? 2 : 0;
   }
-  useEffect(() => {
-
-    if (!user) return;
-
-    loadAllPredictions();
-    loadResults();
-
-  }, [user]);
-
+  
   useEffect(() => {
 
     console.log("USUARIOS", allUsers);
@@ -273,6 +265,15 @@ function App() {
     setRanking(table);
 
   }, [allUsers, results]);
+
+  useEffect(() => {
+
+    if (!user) return;
+
+    loadAllPredictions();
+    loadResults();
+
+  }, [user]);
 
   // 🔒 LOGIN SCREEN
   if (!user) {
