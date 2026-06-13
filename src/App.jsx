@@ -334,6 +334,46 @@ function App() {
         </div>
       )}
 
+      {/* MIS PRONÓSTICOS */}
+      {!isAdmin && (
+        <div
+          style={{
+            background: "white",
+            padding: "20px",
+            borderRadius: "10px",
+            marginBottom: "20px"
+          }}
+        >
+          <h2>📋 Mis pronósticos</h2>
+
+          {matches.map((match) => {
+            const p = allUsers
+              .find((u) => u.email === user.email)
+              ?.predictions?.[match.id];
+
+            return (
+              <div
+                key={match.id}
+                style={{
+                  padding: "8px 0",
+                  borderBottom: "1px solid #eee"
+                }}
+              >
+                <strong>
+                  {match.home} vs {match.away}
+                </strong>
+
+                {" — "}
+
+                {p
+                  ? `${p.home} - ${p.away}`
+                  : "Sin pronóstico"}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       {/* 👑 ADMIN PANEL */}
       {isAdmin && (
         <div style={{ marginBottom: "20px" }}>
