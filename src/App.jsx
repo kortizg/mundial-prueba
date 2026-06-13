@@ -16,6 +16,7 @@ function App() {
   const [allUsers, setAllUsers] = useState([]);
   const [results, setResults] = useState({});
   const [ranking, setRanking] = useState([]);
+  const predictionsOpen = false;
 
   // 🔐 LOGIN
   const login = async () => {
@@ -307,6 +308,32 @@ function App() {
       <h2>Bienvenido {user.displayName}</h2>
       <p>{user.email}</p>
 
+      {/* TABLA DE POSICIONES */}
+      {ranking.length > 0 && (
+        <div
+          style={{
+            background: "white",
+            padding: "20px",
+            borderRadius: "10px",
+            marginBottom: "20px"
+          }}
+        >
+          <h2>🏆 Tabla de posiciones</h2>
+
+          {ranking.map((r, i) => (
+            <div
+              key={r.email}
+              style={{
+                padding: "5px 0",
+                fontWeight: i === 0 ? "bold" : "normal"
+              }}
+            >
+              {i + 1}. {r.name} — {r.total} pts
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* 👑 ADMIN PANEL */}
       {isAdmin && (
         <div style={{ marginBottom: "20px" }}>
@@ -356,57 +383,44 @@ function App() {
           </button>
 
           {/* LISTA ADMIN */}
-          <div style={{ marginTop: "20px" }}>
-            {allUsers.map((u) => (
-              <div
-                key={u.id}
-                style={{
-                  border: "1px solid #ccc",
-                  padding: "15px",
-                  marginBottom: "15px",
-                  borderRadius: "10px"
-                }}
-              >
-                <h3>{u.name}</h3>
-                <p>{u.email}</p>
-
-                {u.predictions &&
-                  Object.entries(u.predictions).map(
-                    ([matchId, p]) => (
-                      <div key={matchId}>
-                        Partido {matchId}: {p.home} - {p.away}
-                      </div>
-                    )
-                  )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* TABLA DE POSICIONES */}
-      {ranking.length > 0 && (
-        <div
-          style={{
-            background: "white",
-            padding: "20px",
-            borderRadius: "10px",
-            marginBottom: "20px"
-          }}
-        >
-          <h2>🏆 Tabla de posiciones</h2>
-
-          {ranking.map((r, i) => (
-            <div
-              key={r.email}
+          <details style={{ marginTop: "20px" }}>
+            <summary
               style={{
-                padding: "5px 0",
-                fontWeight: i === 0 ? "bold" : "normal"
+                cursor: "pointer",
+                fontWeight: "bold",
+                fontSize: "18px"
               }}
             >
-              {i + 1}. {r.name} — {r.total} pts
+              👀 Ver pronósticos de participantes
+            </summary>
+
+            <div style={{ marginTop: "15px" }}>
+              {allUsers.map((u) => (
+                <div
+                  key={u.id}
+                  style={{
+                    border: "1px solid #ccc",
+                    padding: "15px",
+                    marginBottom: "15px",
+                    borderRadius: "10px",
+                    background: "white"
+                  }}
+                >
+                  <h3>{u.name}</h3>
+                  <p>{u.email}</p>
+
+                  {u.predictions &&
+                    Object.entries(u.predictions).map(
+                      ([matchId, p]) => (
+                        <div key={matchId}>
+                          Partido {matchId}: {p.home} - {p.away}
+                        </div>
+                      )
+                    )}
+                </div>
+              ))}
             </div>
-          ))}
+          </details>
         </div>
       )}
 
@@ -443,48 +457,68 @@ function App() {
             </div>
 
             {/* RESULTADO */}
-            <div>
-              <input
-                type="number"
-                min="0"
-                value={predictions[match.id]?.home ?? ""}
-                onChange={(e) =>
-                  updatePrediction(
-                    match.id,
-                    "home",
-                    e.target.value === ""
-                      ? ""
-                      : Number(e.target.value)
-                  )
-                }
-                style={{
-                  width: "60px",
-                  textAlign: "center",
-                  fontSize: "18px"
-                }}
-              />
+            <div style={{ textAlign: "center" }}>
 
-              <span style={{ margin: "0 10px" }}>-</span>
+              {predictionsOpen ? (
 
-              <input
-                type="number"
-                min="0"
-                value={predictions[match.id]?.away ?? ""}
-                onChange={(e) =>
-                  updatePrediction(
-                    match.id,
-                    "away",
-                    e.target.value === ""
-                      ? ""
-                      : Number(e.target.value)
-                  )
-                }
-                style={{
-                  width: "60px",
-                  textAlign: "center",
-                  fontSize: "18px"
-                }}
-              />
+                <>
+                  <input
+                    type="number"
+                    min="0"
+                    value={predictions[match.id]?.home ?? ""}
+                    onChange={(e) =>
+                      updatePrediction(
+                        match.id,
+                        "home",
+                        e.target.value === ""
+                          ? ""
+                          : Number(e.target.value)
+                      )
+                    }
+                    style={{
+                      width: "60px",
+                      textAlign: "center",
+                      fontSize: "18px"
+                    }}
+                  />
+
+                  <span style={{ margin: "0 10px" }}>-</span>
+
+                  <input
+                    type="number"
+                    min="0"
+                    value={predictions[match.id]?.away ?? ""}
+                    onChange={(e) =>
+                      updatePrediction(
+                        match.id,
+                        "away",
+                        e.target.value === ""
+                          ? ""
+                          : Number(e.target.value)
+                      )
+                    }
+                    style={{
+                      width: "60px",
+                      textAlign: "center",
+                      fontSize: "18px"
+                    }}
+                  />
+                </>
+
+              ) : (
+
+                <div
+                  style={{
+                    color: "red",
+                    fontWeight: "bold",
+                    fontSize: "18px"
+                  }}
+                >
+                  🔒 Pronósticos cerrados
+                </div>
+
+              )}
+
             </div>
 
             {/* VISITANTE */}
@@ -507,26 +541,28 @@ function App() {
       ))}
 
       {/* BOTÓN FIJO GUARDAR */}
-      <button
-        onClick={savePredictions}
-        style={{
-          position: "fixed",
-          bottom: "20px",
-          right: "20px",
-          padding: "15px 25px",
-          fontSize: "18px",
-          background: "#1a73e8",
-          color: "white",
-          border: "none",
-          borderRadius: "10px",
-          cursor: "pointer",
-          boxShadow: "0 4px 10px rgba(0,0,0,0.2)"
-        }}
-      >
+      {predictionsOpen && (
+        <button
+          onClick={savePredictions}
+          style={{
+            position: "fixed",
+            bottom: "20px",
+            right: "20px",
+            padding: "15px 25px",
+            fontSize: "18px",
+            background: "#1a73e8",
+            color: "white",
+            border: "none",
+            borderRadius: "10px",
+            cursor: "pointer",
+            boxShadow: "0 4px 10px rgba(0,0,0,0.2)"
+          }}
+        >
         💾 Guardar pronósticos
-      </button>
+        </button>
+      )}
+
     </div>
-  );
-}
+  )};
 
 export default App;
