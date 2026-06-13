@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { auth, db } from "./firebase";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import {
   doc,
   setDoc,
+  getDoc,
   collection,
   getDocs
 } from "firebase/firestore";
@@ -13,6 +14,8 @@ function App() {
   const [user, setUser] = useState(null);
   const [predictions, setPredictions] = useState({});
   const [allUsers, setAllUsers] = useState([]);
+  const [results, setResults] = useState({});
+  const [ranking, setRanking] = useState([]);
 
   // 🔐 LOGIN
   const login = async () => {
@@ -81,6 +84,74 @@ function App() {
     }
   };
 
+  const loadResults = async () => {
+
+    const snapshot = await getDocs(
+      collection(db, "results")
+    );
+
+    const data = {};
+
+    snapshot.forEach((d) => {
+      data[d.id] = d.data();
+    });
+
+    setResults(data);
+
+  };
+
+  const calculateRanking = async () => {
+
+    await loadAllPredictions();
+    await loadResults();
+
+    const usersSnapshot = await getDocs(
+      collection(db, "users")
+    );
+
+    const resultsSnapshot = await getDocs(
+      collection(db, "results")
+    );
+
+    const users = [];
+
+    usersSnapshot.forEach((d) => {
+      users.push(d.data());
+    });
+
+    const realResults = {};
+
+    resultsSnapshot.forEach((d) => {
+      realResults[d.id] = d.data();
+    });
+
+    const table = users.map((u) => {
+
+      let total = 0;
+
+      Object.keys(realResults).forEach((matchId) => {
+
+        total += calculatePoints(
+          u.predictions?.[matchId],
+          realResults[matchId]
+        );
+
+      });
+
+      return {
+        name: u.name,
+        email: u.email,
+        total
+      };
+
+    });
+
+    table.sort((a, b) => b.total - a.total);
+
+    setRanking(table);
+
+  };
+
   const exportBackup = async () => {
     try {
       const snapshot = await getDocs(collection(db, "users"));
@@ -115,10 +186,90 @@ function App() {
     }
   };
 
+  function getOutcome(home, away) {
+  if (home > away) return "W";
+  if (home < away) return "L";
+  return "D";
+  }
+
+  function calculatePoints(pred, real) {
+
+    if (!pred || !real) return 0;
+
+    if (
+      pred.home === real.home &&
+      pred.away === real.away
+    ) {
+      return 3;
+    }
+
+    const predResult = getOutcome(
+      pred.home,
+      pred.away
+    );
+
+    const realResult = getOutcome(
+      real.home,
+      real.away
+    );
+
+    return predResult === realResult ? 2 : 0;
+  }
+  useEffect(() => {
+
+    if (!user) return;
+
+    loadAllPredictions();
+    loadResults();
+
+  }, [user]);
+  
+  useEffect(() => {
+
+    if (
+      allUsers.length === 0 ||
+      Object.keys(results).length === 0
+    ) {
+      return;
+    }
+
+    const table = allUsers.map((u) => {
+
+      let total = 0;
+
+      Object.keys(results).forEach((matchId) => {
+
+        total += calculatePoints(
+          u.predictions?.[matchId],
+          results[matchId]
+        );
+
+      });
+
+      return {
+        name: u.name,
+        email: u.email,
+        total
+      };
+
+    });
+
+    table.sort((a, b) => b.total - a.total);
+
+    setRanking(table);
+
+  }, [allUsers, results]);
+
   // 🔒 LOGIN SCREEN
   if (!user) {
     return (
-      <div style={{ padding: "40px" }}>
+      <div style={{ 
+              minHeight: "100vh",
+              backgroundImage: "url('/fondo.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundAttachment: "fixed",
+              padding: "40px" }}>
         <h1>⚽ Polla Mundial 2026</h1>
 
         <button onClick={login}>
@@ -157,7 +308,23 @@ function App() {
           >
             Ver todos los pronósticos
           </button>
+          <button
+            onClick={loadResults}
+            style={{
+              marginLeft: "10px"
+            }}
+          >
+            Cargar resultados
+          </button>
 
+          <button
+            onClick={calculateRanking}
+            style={{
+              marginLeft: "10px"
+            }}
+          >
+            Calcular ranking
+          </button>
           <button
             onClick={exportBackup}
             style={{
@@ -199,6 +366,32 @@ function App() {
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* TABLA DE POSICIONES */}
+      {ranking.length > 0 && (
+        <div
+          style={{
+            background: "white",
+            padding: "20px",
+            borderRadius: "10px",
+            marginBottom: "20px"
+          }}
+        >
+          <h2>🏆 Tabla de posiciones</h2>
+
+          {ranking.map((r, i) => (
+            <div
+              key={r.email}
+              style={{
+                padding: "5px 0",
+                fontWeight: i === 0 ? "bold" : "normal"
+              }}
+            >
+              {i + 1}. {r.name} — {r.total} pts
+            </div>
+          ))}
         </div>
       )}
 
