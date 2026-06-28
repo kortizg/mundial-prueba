@@ -8,7 +8,8 @@ import {
   collection,
   getDocs
 } from "firebase/firestore";
-import { matches } from "./data/matches";
+import { matches } from "./data/matches_round16";
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -16,7 +17,7 @@ function App() {
   const [allUsers, setAllUsers] = useState([]);
   const [results, setResults] = useState({});
   const [ranking, setRanking] = useState([]);
-  const predictionsOpen = false;
+  const predictionsOpen = true;
 
   // 🔐 LOGIN
   const login = async () => {
