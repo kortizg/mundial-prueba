@@ -288,7 +288,7 @@ function App() {
               backgroundAttachment: "fixed",
               padding: "40px" }}>
         <h1 style={{color:"red"}}>
-        🔥 ESTA ES LA VERSIÓN DE DIECISEISAVOS 🔥
+        🔥 VERSIÓN DIECISEISAVOS 🔥
         </h1>
 
         <button onClick={login}>
