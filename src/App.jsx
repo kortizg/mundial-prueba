@@ -282,13 +282,13 @@ function App() {
     return (
       <div style={{ 
               minHeight: "100vh",
-              backgroundImage: "url('/fondo.jpg')",
+              backgroundImage: "url('/fondo16.jpg')",
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundAttachment: "fixed",
               padding: "40px" }}>
         <h1 style={{color:"red"}}>
-        🔥 ESTA ES LA VERSIÓN DE OCTAVOS 🔥
+        🔥 ESTA ES LA VERSIÓN DE DIECISEISAVOS 🔥
         </h1>
 
         <button onClick={login}>
