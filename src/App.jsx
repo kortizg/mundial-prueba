@@ -287,7 +287,9 @@ function App() {
               backgroundPosition: "center",
               backgroundAttachment: "fixed",
               padding: "40px" }}>
-        <h1>⚽ Polla Mundial 2026</h1>
+        <h1 style={{color:"red"}}>
+        🔥 ESTA ES LA VERSIÓN DE OCTAVOS 🔥
+        </h1>
 
         <button onClick={login}>
           Iniciar sesión con Google
