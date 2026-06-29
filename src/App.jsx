@@ -280,18 +280,23 @@ function App() {
   // 🔒 LOGIN SCREEN
   if (!user) {
     return (
-      <div style={{ 
-              minHeight: "100vh",
-              backgroundImage: "url('/fondo16.jpg')",
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-              backgroundAttachment: "fixed",
-              padding: "40px" }}>
+      <div
+        style={{
+          minHeight: "100vh",
+          backgroundImage: "url('/fondo16.jpg')",
+          backgroundSize: "contain",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "30px"
+        }}
+      >
         <h1
           style={{
             color: "#fff",
-            display: "inline-block",
             padding: "18px 40px",
             background: "linear-gradient(135deg, #8B0000, #FF4500)",
             border: "4px solid #FFD700",
