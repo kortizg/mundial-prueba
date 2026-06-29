@@ -283,7 +283,8 @@ function App() {
       <div style={{ 
               minHeight: "100vh",
               backgroundImage: "url('/fondo16.jpg')",
-              backgroundSize: "cover",
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
               backgroundAttachment: "fixed",
               padding: "40px" }}>
