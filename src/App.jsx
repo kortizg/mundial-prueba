@@ -311,7 +311,12 @@ function App() {
           🔥 VERSIÓN DIECISEISAVOS 🔥
         </h1>
 
-        <button onClick={login}>
+        <button onClick={login} style={buttonStyle}>
+          <img
+            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+            alt="Google"
+            style={{ width: 24, marginRight: 10, verticalAlign: "middle" }}
+          />
           Iniciar sesión con Google
         </button>
       </div>
