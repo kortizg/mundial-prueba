@@ -288,8 +288,22 @@ function App() {
               backgroundPosition: "center",
               backgroundAttachment: "fixed",
               padding: "40px" }}>
-        <h1 style={{color:"red"}}>
-        🔥 VERSIÓN DIECISEISAVOS 🔥
+        <h1
+          style={{
+            color: "#fff",
+            display: "inline-block",
+            padding: "18px 40px",
+            background: "linear-gradient(135deg, #8B0000, #FF4500)",
+            border: "4px solid #FFD700",
+            borderRadius: "20px",
+            boxShadow: "0 8px 20px rgba(0,0,0,0.4)",
+            textShadow: "2px 2px 4px rgba(0,0,0,0.7)",
+            fontSize: "2.5rem",
+            fontWeight: "900",
+            letterSpacing: "3px"
+          }}
+        >
+          🔥 VERSIÓN DIECISEISAVOS 🔥
         </h1>
 
         <button onClick={login}>
