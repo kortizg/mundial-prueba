@@ -311,13 +311,30 @@ function App() {
           🔥 VERSIÓN DIECISEISAVOS 🔥
         </h1>
 
-        <button onClick={login} style={buttonStyle}>
-          <img
-            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-            alt="Google"
-            style={{ width: 24, marginRight: 10, verticalAlign: "middle" }}
-          />
-          Iniciar sesión con Google
+        <button
+          onClick={login}
+          style={{
+            backgroundColor: "#fff",
+            color: "#444",
+            border: "none",
+            borderRadius: "12px",
+            padding: "14px 28px",
+            fontSize: "1.1rem",
+            fontWeight: "bold",
+            cursor: "pointer",
+            boxShadow: "0 6px 15px rgba(0,0,0,0.3)",
+            transition: "all 0.3s ease"
+          }}
+          onMouseOver={(e) => {
+            e.target.style.transform = "scale(1.05)";
+            e.target.style.boxShadow = "0 8px 20px rgba(255,215,0,0.6)";
+          }}
+          onMouseOut={(e) => {
+            e.target.style.transform = "scale(1)";
+            e.target.style.boxShadow = "0 6px 15px rgba(0,0,0,0.3)";
+          }}
+        >
+          🔵 Iniciar sesión con Google
         </button>
       </div>
     );
