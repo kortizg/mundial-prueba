@@ -8,7 +8,7 @@ import {
   collection,
   getDocs
 } from "firebase/firestore";
-import { matches } from "./data/matches_round16";
+import { matches } from "./data/matches_round8";
 
 
 function App() {
@@ -308,7 +308,7 @@ function App() {
             letterSpacing: "3px"
           }}
         >
-          🔥 VERSIÓN DIECISEISAVOS 🔥
+          🔥 VERSIÓN OCTAVOS 🔥
         </h1>
 
         <button
